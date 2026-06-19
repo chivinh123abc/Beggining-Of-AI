@@ -1,0 +1,78 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{CHAPTER 2: SEARCH AND PROBLEM SOLVING}
+
+\subsection{2.1. Solving problems by searching}
+State-space exploration is a computational routine where an agent computes an optimal sequence of discrete actions connecting an initial state configuration directly to a designated goal state by exploring a search graph.
+
+\subsection{2.2. Problem formulation}
+Formalizing a search problem mathematically necessitates declaring a 5-tuple layout:
+\begin{enumerate}
+    \item \textit{Initial state:} The exact atomic state where exploration begins (denoted as $s_0$).
+    \item \textit{Actions set:} An operator mapping a state to all valid reachable choices: $Actions(s)$.
+    \item \textit{Transition model:} A formal transition function returning the result of executing choice $a$ inside state $s$: $Result(s, a)$.
+    \item \textit{Goal test:} A mathematical predicate evaluating if a state satisfies goal conditions: $GoalTest(s) \rightarrow \{True, False\}$.
+    \item \textit{Path cost:} A cumulative weight function aggregating structural step costs across an exploration route: $c(s, a, s')$.
+\end{enumerate}
+
+\subsection{2.3. Uninformed search}
+Uninformed search strategies maintain no directional domain knowledge, relying strictly on the actual accumulated cost function $g(n)$ tracking the path from the root vertex to the current node $n$.
+\begin{itemize}
+    \item \textbf{Breadth-First Search (BFS):} Systematically expands the shallowest unexpanded node first, managed via a FIFO queue structure. Time and space horizons scale exponentially to $\mathcal{O}(b^d)$ (where $b$ is the branching factor and $d$ is the goal depth). It guarantees absolute path optimality if all uniform step weights are identical.
+    \item \textbf{Depth-First Search (DFS):} Expands the deepest unexpanded node first, managed via a LIFO stack layout. It optimizes memory consumption with a linear space boundary of $\mathcal{O}(bm)$ (where $m$ represents max depth), but suffers from an exponential time complexity of $\mathcal{O}(b^m)$ and fails to guarantee solution optimality.
+    \item \textbf{Uniform-Cost Search (UCS):} Guided mathematically by expanding the lowest-cost unexpanded node inside a priority queue. The node evaluation function is defined as:
+    \begin{equation}
+        f(n) = g(n)
+    \end{equation}
+    UCS guarantees global cost minimality across any graph where individual edge costs strictly exceed zero.
+\end{itemize}
+
+\subsection{2.4. Informed search}
+Informed search models inject domain-specific hints through a heuristic function $h(n)$ that estimates the minimal path cost remaining from current node $n$ to the destination goal state.
+\begin{itemize}
+    \item \textbf{Greedy Best-First Search:} Node expansion priority relies exclusively on goal proximity projections, completely discarding historical path weights:
+    \begin{equation}
+        f(n) = h(n)
+    \end{equation}
+    While computationally swift, it is highly vulnerable to local optima traps and infinite loops.
+    \item \textbf{A* Search Engine:} Unifies accumulated historical path execution costs $g(n)$ with projected remaining path costs $h(n)$ to guide exploration:
+    \begin{equation}
+        f(n) = g(n) + h(n)
+    \end{equation}
+    \item \textbf{Mathematical Conditions for A* Optimality:} To mathematically guarantee that the A* engine isolates the global shortest path, the heuristic function $h(n)$ must obey formal predicates:
+    \begin{itemize}
+        \item \textit{Admissibility (For Tree Search):} The function $h(n)$ must never overestimate the true optimal path cost $h^*(n)$ required to reach the target goal:
+        \begin{equation}
+            0 \le h(n) \le h^*(n), \quad \forall n
+        \end{equation}
+        \item \textit{Consistency / Monotonicity (For Graph Search):} For any node $n$ generating a successor $n'$ via action $a$, the heuristic must satisfy the formal triangle inequality constraint:
+        \begin{equation}
+            h(n) \le c(n, a, n') + h(n')
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+
+\subsection{2.5. Local search}
+Local search models operate in configurations where the exploration path is completely irrelevant, and the objective centers on maximizing or minimizing a target state's score profile.
+\begin{itemize}
+    \item \textbf{Hill-Climbing Search:} Navigates the state space strictly along the direction of increasing utility metrics. The greedy successor selection strategy is formulated as:
+    \begin{equation}
+        s_{next} = \arg\max_{s' \in Neighbors(s)} Utility(s')
+    \end{equation}
+    This strategy frequently fails when encountering local maxima, flat plateaux, or sharp ridges.
+    \item \textbf{Simulated Annealing Algorithm:} Blends greedy hill-climbing with randomized adjustments to escape local traps, drawing its mathematical mechanics from statistical thermodynamics. If a successor state $s'$ degrades current performance ($\Delta E = Utility(s') - Utility(s) < 0$), the algorithm transitions to it probabilistically based on the Boltzmann distribution:
+    \begin{equation}
+        P(\text{Accept State Transition}) = e^{\frac{\Delta E}{T}}
+    \end{equation}
+    Where $T$ marks a temperature schedule parameter that monotonically decreases over time. At high $T$ levels, wide random state jumps are permitted; as $T \rightarrow 0$, the framework converges into a pure greedy hill-climbing optimization.
+\end{itemize}
+
+\subsection{2.6. Project and exercises}
+Coding assignments simulate classic combinatorial setups such as the 8-Queens constraint problem, real-world street network routing optimization, and tactical drone path planning avoiding high-rise urban structures.
+
+\end{document}

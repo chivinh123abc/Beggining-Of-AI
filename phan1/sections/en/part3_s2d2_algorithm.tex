@@ -1,0 +1,24 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{PART 3: S2D2 CORE ALGORITHMIC ANALYSIS (40\% Weight)}
+
+Because the extensive-form state space of a sequential graph game scales exponentially with urban dimensions, computing an exact Strong Stackelberg Equilibrium (SSE) is an NP-hard problem \cite{korzhyk2011security}. This project proposes the \textbf{S2D2 (Sequential Stackelberg Drone Defense)} paradigm to isolate approximate equilibrium strategies through a three-step hierarchical framework \cite{mutzari2025defending}:
+
+\subsection*{Algorithmic Architecture Pipeline (Pipeline Architecture)}
+\begin{center}
+    \small $\text{[Urban Graph } G=(V,E)\text{]} \xrightarrow{\text{Step 1: Graph Coarsening}} \text{[Neighborhood Clusters]} \xrightarrow{\text{Step 2: Subgame Engine (DFS)}} \text{[Single-Drone Subgame]} \xrightarrow{\text{Step 3: Meta-Game Solver}} \text{[MILP Matrix]}$
+\end{center}
+
+\subsection*{Detailed Algorithmic Execution Steps:}
+\begin{enumerate}
+    \item \textbf{Step 1: Graph Coarsening ($\delta$-coarsening):} Real-world urban maps scale to hundreds of thousands of nodes, rendering direct global matrix computations impossible \cite{mutzari2025defending}. S2D2 applies an adaptive clustering routine to partition the topology into isolated artificial ``Neighborhoods'' based on a granularity parameter $\delta$ \cite{mutzari2025defending}. The routine drops low-value sectors where rewards fall below $\delta$, effectively isolating high-value targets into tightly bound sub-graphs \cite{mutzari2025defending}.
+    \item \textbf{Step 2: Single-Attacker Single-Defender Subgame Engine:} Within each isolated neighborhood cluster, the framework evaluates a localized execution tree between 1 defender and 1 attacker drone under a probabilistic defender presence coefficient $\lambda$ \cite{korzhyk2010complexity}. The engine applies deep Depth-First Search (DFS) routines coupled with active pruning of mathematically \textbf{Dominated Strategies} to contract the search space and accelerate convergence \cite{mutzari2025defending}.
+    \item \textbf{Step 3: Global Meta-Game Solver:} After extracting parameterized utility functions across neighborhoods, S2D2 reduces the decentralized multi-drone allocation problem back into a static, multi-resource assignment model resolved via a \textbf{Mixed Integer Linear Program (MILP)} \cite{mutzari2025defending}. By conducting a piece-wise linear approximation over the variable probability vector $\lambda$, the global MILP is compiled and resolved to output the definitive mixed strategy deployment matrix for the interceptor fleet \cite{mutzari2025defending}.
+\end{enumerate}
+
+\end{document}

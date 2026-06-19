@@ -1,0 +1,38 @@
+﻿\documentclass[11pt,a4paper]{article}
+
+% =========================================================================
+% CẤU HÌNH CHUNG (Shared Config)
+% =========================================================================
+\input{../config/packages}
+\input{../config/formatting}
+
+% Subfiles: cho phép compile độc lập từng section
+\usepackage{subfiles}
+
+\begin{document}
+
+% =========================================================================
+% PHẦN TIẾNG VIỆT
+% =========================================================================
+\subfile{sections/vi/part1_problem}
+\subfile{sections/vi/part2_math_model}
+\subfile{sections/vi/part3_s2d2_algorithm}
+\subfile{sections/vi/part4_results}
+
+% =========================================================================
+% ENGLISH SECTION
+% =========================================================================
+\newpage
+\subfile{sections/en/part1_problem}
+\subfile{sections/en/part2_math_model}
+\subfile{sections/en/part3_s2d2_algorithm}
+\subfile{sections/en/part4_results}
+
+% =========================================================================
+% TÀI LIỆU THAM KHẢO (References)
+% =========================================================================
+\newpage
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

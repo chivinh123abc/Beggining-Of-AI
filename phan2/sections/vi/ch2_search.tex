@@ -1,0 +1,78 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{CHƯƠNG 2: TÌM KIẾM VÀ GIẢI QUYẾT BÀI TOÁN (Search and Problem Solving)}
+
+\subsection{2.1. Giải quyết bài toán bằng tìm kiếm (Solving problems by searching)}
+Tìm kiếm trạng thái là quá trình một đại lý thiết lập một chuỗi các hành động tối ưu để di chuyển từ trạng thái hiện tại đến trạng thái đích thông qua việc khám phá một cây hoặc đồ thị tìm kiếm nhân tạo.
+
+\subsection{2.2. Phát biểu bài toán (Problem formulation)}
+Toán học hóa một bài toán tìm kiếm yêu cầu định nghĩa chặt chẽ một bộ gồm 5 thành phần:
+\begin{enumerate}
+    \item \textit{Trạng thái khởi đầu (Initial state):} Trạng thái bắt đầu của tác nhân (Ký hiệu là $s_0$).
+    \item \textit{Tập các hành động (Actions):} Hàm trả về các hành động khả thi tại một trạng thái: $Actions(s)$.
+    \item \textit{Mô hình chuyển trạng thái (Transition model):} Hàm xác định trạng thái kết quả khi thực hiện hành động $a$ tại trạng thái $s$: $Result(s, a)$.
+    \item \textit{Kiểm tra mục tiêu (Goal test):} Hàm logic xác định trạng thái hiện tại đã đạt đích hay chưa: $GoalTest(s) \rightarrow \{True, False\}$.
+    \item \textit{Chi phí đường đi (Path cost):} Hàm toán học tích lũy chi phí của tuyến đường, tổng hợp từ chi phí từng bước đơn lẻ: $c(s, a, s')$.
+\end{enumerate}
+
+\subsection{2.3. Tìm kiếm mù / Không có thông tin (Uninformed search)}
+Đặc trưng của nhóm này là thuật toán duyệt không gian chỉ dựa trên hàm chi phí thực tế $g(n)$ tích lũy từ nút gốc đến nút hiện tại $n$, hoàn toàn không có ước lượng tương lai.
+\begin{itemize}
+    \item \textbf{Tìm kiếm theo chiều rộng (BFS):} Mở rộng các nút nông nhất trước trên cây tìm kiếm thông qua cấu trúc dữ liệu hàng đợi FIFO. Đặc trưng toán học: Độ phức tạp thời gian và không gian đều ở mức lũy thừa $\mathcal{O}(b^d)$ (với $b$ là hệ số nhánh, $d$ là độ sâu của nghiệm), đảm bảo tính tối ưu nếu chi phí của mọi bước di chuyển bằng nhau.
+    \item \textbf{Tìm kiếm theo chiều sâu (DFS):} Mở rộng các nút sâu nhất trên nhánh hiện tại trước thông qua cấu trúc ngăn xếp LIFO. Đặc trưng toán học: Tiết kiệm không gian lưu trữ với độ phức tạp không gian tuyến tính chỉ ở mức $\mathcal{O}(bm)$ (với $m$ là độ sâu tối đa của cây), nhưng độ phức tạp thời gian cực lớn $\mathcal{O}(b^m)$ và không đảm bảo tìm thấy nghiệm tối ưu.
+    \item \textbf{Tìm kiếm chi phí đồng nhất (Uniform-Cost Search - UCS):} Đặc trưng bởi việc mở rộng nút $n$ có chi phí thực tế nhỏ nhất trong hàng đợi ưu tiên. Hàm toán học điều hướng nút đặc trưng:
+    \begin{equation}
+        f(n) = g(n)
+    \end{equation}
+    Thuật toán đảm bảo tìm được đường đi ngắn nhất toàn cục trên mọi đồ thị có chi phí cạnh lớn hơn 0.
+\end{itemize}
+
+\subsection{2.4. Tìm kiếm có thông tin / Heuristic (Informed search)}
+Nhóm giải thuật này đưa vào hàm toán học Heuristic $h(n)$ dùng để ước lượng chi phí ngắn nhất từ nút hiện tại $n$ tới trạng thái đích.
+\begin{itemize}
+    \item \textbf{Tìm kiếm Tham lam (Greedy Best-First Search):} Đặc trưng bởi hàm toán học đánh giá trạng thái hoàn toàn phụ thuộc vào dự báo tương lai, bỏ qua chi phí quá khứ:
+    \begin{equation}
+        f(n) = h(n)
+    \end{equation}
+    Thuật toán di chuyển nhanh về phía đích nhưng rất dễ bị rơi vào bẫy tối ưu cục bộ hoặc vòng lặp vô hạn.
+    \item \textbf{Thuật toán Tìm kiếm $A^*$:} Đặc trưng bằng biểu thức toán học kết hợp cân bằng giữa chi phí thực tế đã đi từ nút gốc $g(n)$ và chi phí ước lượng tương lai $h(n)$:
+    \begin{equation}
+        f(n) = g(n) + h(n)
+    \end{equation}
+    \item \textbf{Cơ sở toán học bảo toàn tính tối ưu của $A^*$:} Để giải thuật $A^*$ tìm được đường đi ngắn nhất toàn cục, biểu thức toán học $h(n)$ phải thỏa mãn các thuộc tính đặc trưng sau:
+    \begin{itemize}
+        \item \textit{Tính chấp nhận được (Admissibility - áp dụng cho cây tìm kiếm):} Hàm $h(n)$ không bao giờ được đánh giá cao hơn chi phí thực tế ngắn nhất $h^*(n)$ để đến đích:
+        \begin{equation}
+            0 \le h(n) \le h^*(n), \quad \forall n
+        \end{equation}
+        \item \textit{Tính nhất quán / Đơn điệu (Consistency - áp dụng cho đồ thị tìm kiếm):} Với mọi nút $n$ và nút con $n'$ sinh ra bởi hành động $a$, hàm $h(n)$ phải tuân thủ bất đẳng thức tam giác không gian:
+        \begin{equation}
+            h(n) \le c(n, a, n') + h(n')
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+
+\subsection{2.5. Tìm kiếm cục bộ (Local search)}
+Áp dụng cho các bài toán mà đường đi không quan trọng, chỉ quan tâm đến trạng thái đích tối ưu. Thuật toán hoạt động bằng cách thay đổi cấu hình trạng thái hiện tại thay vì xây dựng cây tìm kiếm.
+\begin{itemize}
+    \item \textbf{Tìm kiếm leo đồi (Hill-climbing search):} Duyệt không gian trạng thái theo hướng tăng liên tục của hàm đánh giá chất lượng (hoặc giảm liên tục của hàm chi phí). Chiến lược chọn trạng thái kế tiếp đặc trưng bởi biểu thức toán học tham lam:
+    \begin{equation}
+        s_{next} = \arg\max_{s' \in Neighbors(s)} Utility(s')
+    \end{equation}
+    Thuật toán gặp hạn chế lớn khi rơi vào các đỉnh cục bộ (\textit{local maxima}), cao nguyên (\textit{plateaux}) hoặc các gờ sắc nhọn (\textit{ridges}).
+    \item \textbf{Thuật toán Luyện kim giả lập (Simulated Annealing):} Kết hợp tìm kiếm leo đồi với bước di chuyển ngẫu nhiên để thoát khỏi tối ưu cục bộ. Đặc trưng toán học của giải thuật dựa trên vật lý nhiệt động lực học: nếu trạng thái con $s'$ xấu hơn trạng thái hiện tại $s$ ($\Delta E = Utility(s') - Utility(s) < 0$), thuật toán không từ bỏ ngay mà chấp nhận chuyển sang trạng thái xấu đó với một xác suất ngẫu nhiên tuân theo phân phối Boltzmann:
+    \begin{equation}
+        P(\text{Chấp nhận chuyển trạng thái}) = e^{\frac{\Delta E}{T}}
+    \end{equation}
+    Trong đó, $T$ là tham số nhiệt độ giảm dần theo thời gian theo một lịch trình làm lạnh (\textit{cooling schedule}). Khi $T$ cao, thuật toán chấp nhận nhảy ngẫu nhiên; khi $T$ giảm về mốc 0, thuật toán hội tụ về leo đồi thuần túy.
+\end{itemize}
+
+\subsection{2.6. Dự án và bài tập (Project and exercises)}
+Thiết lập mã nguồn lập trình mô phỏng các bài toán kinh điển như bài toán Tám quân hậu (8-Queens), bài toán định tuyến bản đồ thành phố thực tế, ứng dụng tìm đường đi tối ưu cho drone an ninh vượt vật cản trong không gian đô thị.
+
+\end{document}

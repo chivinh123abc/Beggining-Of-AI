@@ -1,0 +1,56 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{CHƯƠNG 3: BIỂU DIỄN TRI THỨC VÀ SUY LUẬN (Knowledge Representation and Reasoning)}
+
+\subsection{3.1. Hệ thống dựa trên tri thức (Knowledge based systems)}
+Một hệ thống dựa trên tri thức (\textit{Knowledge-based system}) tổ chức mã nguồn AI thành hai phần độc lập: Cơ sở tri thức (\textit{Knowledge Base - KB}) chứa tập hợp câu mệnh đề biểu diễn các sự thật về thế giới thực bằng một ngôn ngữ trang trọng, và Công cụ suy luận (\textit{Inference Engine}) chứa các thuật toán suy diễn logic độc lập với nội dung tri thức. Đại lý tương tác với hệ thống qua vòng lặp:
+\begin{equation}
+    \text{Tri giác mới} \xrightarrow{} \texttt{TELL}(KB) \xrightarrow{} \text{Công cụ suy luận xử lý} \xrightarrow{} \texttt{ASK}(KB) \rightarrow \text{Hành động tối ưu}
+\end{equation}
+
+\subsection{3.2. Logic mệnh đề (Propositional logic)}
+\begin{itemize}
+    \item \textbf{Cú pháp và Ngữ nghĩa:} Biểu diễn tri thức bằng các biến mệnh đề ký hiệu ($P, Q, R$) và các liên kết toán học ($\wedge, \vee, \neg, \Rightarrow, \Leftrightarrow$). 
+    \item \textbf{Mô hình hóa toán học của Luật kéo theo logic (Entailment):} Một mô hình $m$ là một phép gán giá trị Đúng/Sai cho tất cả các biến logic. Gọi $M(KB)$ là tập hợp tất cả các mô hình làm cho cơ sở tri thức đúng, và $M(\alpha)$ là tập các mô hình làm cho câu mệnh đề $\alpha$ đúng. Biểu thức toán học thiết lập đặc trưng của hệ suy luận:
+    \begin{equation}
+        KB \models \alpha \iff M(KB) \subseteq M(\alpha)
+    \end{equation}
+    Nghĩa là câu $\alpha$ là hệ quả logic của $KB$ nếu và chỉ nếu $\alpha$ luôn đúng trong tất cả các thế giới mà $KB$ đúng.
+\end{itemize}
+
+\subsection{3.3. Logic bậc nhất (First-order logic)}
+Mở rộng logic mệnh đề để biểu diễn tri thức một cách tự nhiên và gọn nhẹ hơn nhờ việc đưa vào cấu trúc toán học của: Đối tượng (\textit{Objects} - thực thể trong thế giới), Thuộc tính và Mối quan hệ (\textit{Relations/Predicates}), Hàm (\textit{Functions}), và hai loại Lượng từ toán học ràng buộc biến:
+\begin{itemize}
+    \item \textbf{Lượng từ toàn thể ($\forall$):} Khẳng định tính chất đúng với mọi đối tượng trong miền xác định, thường đi kèm liên kết kéo theo ($\Rightarrow$).
+    \item \textbf{Lượng từ tồn tại ($\exists$):} Khẳng định tính chất đúng với ít nhất một đối tượng trong miền xác định, thường đi kèm liên kết hội ($\wedge$).
+\end{itemize}
+
+\subsection{3.4. Suy luận trong Logic bậc nhất (Inference using FOL)}
+Cơ chế suy luận dịch chuyển từ việc lập bảng chân trị bùng nổ không gian trạng thái sang các phép biến đổi trực tiếp trên câu tri thức: Phép thế (\textit{Substitution} $\{x/k\}$), Phép đồng nhất hóa (\textit{Unification}) tìm phép thế $\theta$ làm cho hai vị từ phức tạp trở nên giống nhau: $Unify(P(x), P(A)) = \{x/A\}$. Áp dụng các luật suy luận vạn năng như Modus Ponens mở rộng (\textit{Generalized Modus Ponens}).
+
+\subsection{3.5. Thuật toán phân giải bác bỏ (Resolution refutation)}
+Thuật toán phân giải bác bỏ là nền tảng của các công cụ suy luận tự động tối ưu nhất, hoạt động dựa trên phương pháp chứng minh phản chứng.
+\begin{itemize}
+    \item \textbf{Biểu thức toán học thiết lập đặc trưng hệ thống:} Để chứng minh câu $\alpha$ là đúng từ cơ sở tri thức, thuật toán thêm phủ định $\neg\alpha$ vào $KB$ và tiến hành triệt tiêu các bổ đề đối ngẫu để tìm ra mệnh đề rỗng đại diện cho mâu thuẫn toán học ($\emptyset$):
+    \begin{equation}
+        KB \wedge \neg\alpha \models \emptyset
+    \end{equation}
+    \item \textbf{Quy tắc phân giải tổng quát (Resolution Rule):} Yêu cầu chuyển đổi tất cả các câu tri thức phức tạp về Dạng chuẩn hội (\textit{CNF - Conjunctive Normal Form} - chuỗi các phép hội giữa các mệnh đề disjunction). Biểu thức khử đại số đặc trưng:
+    \begin{equation}
+        \frac{l_1 \vee \dots \vee l_i \vee \dots \vee l_k, \quad m_1 \vee \dots \vee m_j \vee \dots \vee m_n}{(l_1 \vee \dots \vee l_{i-1} \vee l_{i+1} \vee \dots \vee l_k \vee m_1 \vee \dots \vee m_{j-1} \vee m_{j+1} \vee \dots \vee m_n)\theta}
+    \end{equation}
+    Trong đó, $l_i$ và $m_j$ là hai bổ đề đối ngẫu có khả năng đồng nhất hóa thông qua phép thế $\theta$ sao cho $l_i\theta = \neg (m_j\theta)$.
+\end{itemize}
+
+\subsection{3.6. Các hệ thống suy luận logic (Logic reasoning systems)}
+Bao gồm các cấu trúc lập trình lập luận tiến (\textit{Forward Chaining}) kích hoạt từ dữ liệu thô đẩy lên mục tiêu, lập luận lùi (\textit{Backward Chaining}) kích hoạt từ giả thuyết đích hạ xuống điều kiện cần, và các hệ thống ngôn ngữ lập trình logic như Prolog.
+
+\subsection{3.7. Bài tập (Exercises)}
+Thực hiện các bài toán chuyển đổi ngôn ngữ tự nhiên sang câu FOL, lập quy trình phân giải CNF để chứng minh các định lý toán học logic.
+
+\end{document}

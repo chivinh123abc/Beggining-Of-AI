@@ -1,0 +1,56 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{CHAPTER 3: KNOWLEDGE REPRESENTATION AND REASONING}
+
+\subsection{3.1. Knowledge based systems}
+A knowledge-based system splits AI engineering into two distinct decoupled blocks: the Knowledge Base ($KB$), a formal repository storing structured sentences describing real-world assertions using symbolic syntax, and the Inference Engine, which implements execution algorithms to derive new properties independently of domain content. The interaction cycle follows the primary primitive operations:
+\begin{equation}
+    \text{New Percept} \xrightarrow{} \texttt{TELL}(KB) \xrightarrow{} \text{Inference Processing} \xrightarrow{} \texttt{ASK}(KB) \rightarrow \text{Optimal Action}
+\end{equation}
+
+\subsection{3.2. Propositional logic}
+\begin{itemize}
+    \item \textbf{Syntax and Semantics:} Represents factual concepts via symbolic propositional variables ($P, Q, R$) unified by mathematical logical connectives ($\wedge, \vee, \neg, \Rightarrow, \Leftrightarrow$).
+    \item \textbf{Mathematical Modeling of Entailment:} A model $m$ is a formal mapping assigning static truth values (True/False) to variables. Let $M(KB)$ be the extensive set of all models satisfying $KB$, and $M(\alpha)$ represent models satisfying sentence $\alpha$. The structural feature of logical entailment is formalized as:
+    \begin{equation}
+        KB \models \alpha \iff M(KB) \subseteq M(\alpha)
+    \end{equation}
+    This equation states that $\alpha$ is a necessary logical consequence of $KB$ if and only if $\alpha$ holds true in every possible world model configuration where $KB$ is true.
+\end{itemize}
+
+\subsection{3.3. First-order logic}
+Enhances the expressive power of propositional logic by decomposing real-world knowledge into structured sets of: Objects (entities in the domain), Relations and Predicates (properties connecting objects), Functions, and two dedicated mathematical Quantifiers:
+\begin{itemize}
+    \item \textbf{Universal Quantifier ($\forall$):} Declares that a specific predicate holds true for every single object instance in the domain, typically paired with the implication connector ($\Rightarrow$).
+    \item \textbf{Existential Quantifier ($\exists$):} Declares that a specific predicate holds true for at least one object instance in the domain, typically paired with the conjunction connector ($\wedge$).
+\end{itemize}
+
+\subsection{3.4. Inference using FOL}
+Deduction translates from brute-force truth table model matching to symbolic mechanical manipulations: applying substitution syntax ($\{x/k\}$) and computing formal **Unification** rules to isolate a substitution vector $\theta$ that aligns variable predicate structures: $Unify(P(x), P(A)) = \{x/A\}$. This unifier powers generalized inference engines like Generalized Modus Ponens.
+
+\subsection{3.5. Resolution refutation}
+The resolution refutation framework serves as the structural foundation for modern automated deduction systems, executing proofs through contradiction.
+\begin{itemize}
+    \item \textbf{Mathematical Proof Framework:} To prove that a target hypothesis $\alpha$ logically follows from the system database, the engine appends the negated sentence $\neg\alpha$ directly to $KB$ and iteratively applies resolution rules to isolate an empty clause ($\emptyset$), which represents a logical contradiction:
+    \begin{equation}
+        KB \wedge \neg\alpha \models \emptyset
+    \end{equation}
+    \item \textbf{Generalized Resolution Calculation Rule:} Requires translating all logical sentences into Conjunctive Normal Form (CNF - a conjunction of disjunctive clauses). The mathematical literal elimination feature is formulated as:
+    \begin{equation}
+        \frac{l_1 \vee \dots \vee l_i \vee \dots \vee l_k, \quad m_1 \vee \dots \vee m_j \vee \dots \vee m_n}{(l_1 \vee \dots \vee l_{i-1} \vee l_{i+1} \vee \dots \vee l_k \vee m_1 \vee \dots \vee m_{j-1} \vee m_{j+1} \vee \dots \vee m_n)\theta}
+    \end{equation}
+    Where complementary literals $l_i$ and $m_j$ are unified via substitution vector $\theta$ such that $l_i\theta = \neg (m_j\theta)$, causing them to systematically cancel out.
+\end{itemize}
+
+\subsection{3.6. Logic reasoning systems}
+Includes production architectures utilizing Forward Chaining (data-driven models moving from basic assertions up to goals), Backward Chaining (goal-driven sub-query tracking to verify prerequisites), and logic programming environments like Prolog.
+
+\subsection{3.7. Exercises}
+Parsing natural language assertions into structured FOL statements and building resolution refutation trees to mechanically prove formal mathematical theorems.
+
+\end{document}

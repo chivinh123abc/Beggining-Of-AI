@@ -1,0 +1,18 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{PART 2: MATHEMATICAL MODELING OF THE GAME (25\% Weight)}
+
+To resolve the tactical deployment problem, the system models the engagement using game-theoretic principles through Security Games \cite{mutzari2025defending}:
+\begin{itemize}
+    \item \textbf{Graph Modeling:} The urban airspace is abstracted as a general undirected graph $G=(V,E)$ \cite{mutzari2025defending}. The vertex set $V$ defines targeted ground zones or critical infrastructure sectors requiring physical protection, while the edge set $E$ maps the interconnected aerial flight corridors connecting these sectors \cite{mutzari2025defending}.
+    \item \textbf{Sequential SSSG Model:} The tactical encounter is formulated as a \textbf{Sequential Stackelberg Security Game (SSSG)} \cite{mutzari2025defending}. The Defender (the automated urban AI backend) acts as the leader, committing to a randomized \textbf{Mixed Strategy} profile to allocate aerial interceptors across sectors \cite{mutzari2025defending}. The Attacker (the adversary) acts as the follower, monitoring the defender's commitment map to deploy a mathematically calculated \textbf{Best Response} flight path that maximizes systemic damage \cite{mutzari2025defending}.
+    \item \textbf{Hardware Constraints:} The environment enforces strict physical parameters, including: Battery capacity ($B$) which restricts the maximal flight path length of the drones (where each edge traversal or hovering action consumes exactly 1 battery unit) and Payload capacity ($P$) which dictates the maximum number of targets an attacker drone can neutralize \cite{mutzari2025defending}.
+    \item \textbf{Utility Formulation (General-Sum Game):} The environment is configured as a \textbf{General-Sum game}, acknowledging that the players' objectives are not diametrically opposed \cite{mutzari2025defending}. Attacker reward metrics ($R^a$) and defender penalty weights ($P^d$) are calibrated independently based on priority evaluations by security experts \cite{mutzari2025defending}.
+\end{itemize}
+
+\end{document}

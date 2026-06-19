@@ -1,0 +1,73 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{CHƯƠNG 5: HỌC MÁY (Machine Learning)}
+
+\subsection{5.1. Định nghĩa và khái niệm của Học máy (Definition and concepts of machine learning)}
+Học máy nghiên cứu các thuật toán cho phép hệ thống tự động tối ưu hóa hiệu suất thực thi tác vụ thông qua dữ liệu huấn luyện quá khứ. Phân chia cấu trúc học máy thành: Học có giám sát (\textit{Supervised learning} - học từ cặp dữ liệu đầu vào và nhãn), Học không giám sát (\textit{Unsupervised learning} - tìm cấu trúc ẩn của dữ liệu thô), và Học tăng cường (\textit{Reinforcement learning} - tối ưu hóa hành động qua cơ chế nhận phần thưởng/hình phạt từ môi trường).
+
+\subsection{5.2. Học cây quyết định (Decision tree learning - Thuật toán ID3)}
+Thuật toán ID3 xây dựng cây quyết định phân loại bằng cách sử dụng các biểu thức của Lý thuyết thông tin làm bộ lọc Heuristic lựa chọn thuộc tính phân nhánh tối ưu nhất tại mỗi nút.
+\begin{itemize}
+    \item \textbf{Biểu thức Hàm Entropy (Đo mức độ hỗn loạn thông tin của tập dữ liệu $S$):} Giả định dữ liệu thuộc $c$ lớp khác nhau, tỷ lệ mẫu dữ liệu thuộc lớp $i$ là $p_i$:
+    \begin{equation}
+        Entropy(S) = - \sum_{i=1}^{c} p_i \log_2(p_i)
+    \end{equation}
+    \item \textbf{Biểu thức Hàm Lượng thông tin thu nhận (Information Gain) của thuộc tính $A$:} Đo chỉ số suy giảm độ hỗn loạn của tập dữ liệu $S$ nếu ta tiến hành phân nhánh theo thuộc tính $A$:
+    \begin{equation}
+        Gain(S, A) = Entropy(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} Entropy(S_v)
+    \end{equation}
+    Trong đó, $S_v$ là tập con của $S$ chứa các mẫu mà thuộc tính $A$ mang giá trị $v$.
+    \item \textbf{Hàm quyết định đặc trưng của thuật toán:} Tại mỗi nút cây, thuộc tính tối ưu $A^*$ được trích xuất bằng biểu thức tối đa hóa lợi ích:
+    \begin{equation}
+        A^* = \arg\max_{A} Gain(S, A)
+    \end{equation}
+\end{itemize}
+
+\subsection{5.3. Phân loại Naive Bayes (Naive Bayes classification)}
+Thuật toán phân loại Naive Bayes hoạt động dựa trên việc áp dụng **Giả định độc lập ngây thơ** (\textit{Naive Independence Assumption}): coi tất cả các thuộc tính mô tả $X = (x_1, x_2, ..., x_d)$ hoàn toàn độc lập với nhau khi biết trạng thái lớp quyết định $C_k$.
+
+\textbf{Biểu thức toán học tạo đặc trưng thuật toán:} Sử dụng giả định độc lập để bẻ gãy xác suất đồng thời đa biến thành tích các xác suất đơn biến độc lập:
+\begin{equation}
+    P(C_k | x_1, ..., x_d) = \frac{P(C_k) \cdot P(x_1, ..., x_d | C_k)}{P(x_1, ..., x_d)} \propto P(C_k) \cdot \prod_{j=1}^{d} P(x_j | C_k)
+\end{equation}
+Hàm toán học đưa ra quyết định phân loại cho một mẫu thử mới dựa trên quy tắc tối đa hóa xác suất hậu nghiệm (Maximum A Posteriori - MAP):
+\begin{equation}
+    \hat{y} = \arg\max_{C_k} \left[ P(C_k) \cdot \prod_{j=1}^{d} P(x_j | C_k) \right]
+\end{equation}
+Đặc trưng toán học nhân chuỗi $\prod P(x_j | C_k)$ giúp thuật toán giải quyết triệt để hiện tượng sụp đổ số liệu do thiếu mẫu khi số chiều dữ liệu tăng cao (\textit{Curse of Dimensionality}).
+
+\subsection{5.4. Thuật toán láng giềng gần nhất (K-nearest neighbor - KNN)}
+KNN thuộc nhóm thuật toán học thực nghiệm dựa trên mẫu (\textit{Instance-based / Lazy learning}). Thuật toán không có pha huấn luyện tham số mà đặc trưng hình học của nó được cấu hình trực tiếp từ hàm khoảng cách không gian vector.
+\begin{itemize}
+    \item \textbf{Biểu thức Khoảng cách Minkowski tổng quát ($L_p$ norm):} Dùng để đo đạc độ lân cận giữa mẫu thử $x$ và mẫu huấn luyện $y$ trong không gian đặc trưng $d$ chiều:
+    \begin{equation}
+        D_p(x, y) = \left( \sum_{j=1}^{d} |x_j - y_j|^p \right)^{\frac{1}{p}}
+    \end{equation}
+    Cấu hình đặc trưng hình học dịch chuyển theo tham số $p$: Khi $p=2$, thuật toán mang đặc trưng của khoảng cách đường thẳng vật lý \textit{Euclidean} ($L_2$); khi $p=1$, thuật toán mang đặc trưng dịch chuyển mạng lưới ô bàn cờ \textit{Manhattan} ($L_1$).
+    \item \textbf{Hàm toán học quyết định nhãn có trọng số khoảng cách:} Gọi $N_K(x)$ là tập hợp $K$ láng giềng gần nhất của $x$ tìm được từ khoảng cách $D_p$. Để tối ưu hóa đặc trưng phân chia, các mẫu ở gần hơn phải mang trọng số bầu chọn cao hơn thông qua hàm tỉ lệ nghịch:
+    \begin{equation}
+        \hat{y} = \arg\max_{v} \sum_{y_i \in N_K(x)} w_i \cdot I(v_i = v) \quad \text{với} \quad w_i = \frac{1}{D_p(x, y_i)^2 + \epsilon}
+    \end{equation}
+    Trong đó, $I(\cdot)$ là hàm chỉ thị (bằng 1 nếu biểu thức trong ngoặc đúng, bằng 0 nếu sai) và $\epsilon \rightarrow 0$ là hằng số chống lỗi chia cho mốc số 0. Biểu thức toán học này tạo nên biên phân chia lớp phi tuyến phức tạp dạng đa diện Voronoi (\textit{Voronoi tessellation}).
+\end{itemize}
+
+\subsection{5.5. Các thuật toán học máy khác (Other machine learning algorithms)}
+Giáo trình của Russell \& Norvig mở rộng không gian học máy sang mô hình cấu trúc Mạng nơ-ron nhân tạo (\textit{Artificial Neural Networks - ANN}).
+\begin{itemize}
+    \item \textbf{Mô hình một Nơ-ron toán học (Perceptron):} Đầu vào vector $x$ được tổng hợp tuyến tính bằng tích vô hướng với ma trận trọng số $w$, cộng sai số chặn $b$ trước khi đi qua hàm kích hoạt phi tuyến ($g$ như Sigmoid, Tanh, hoặc ReLU):
+    \begin{equation}
+        h_w(x) = g\left( \sum_{i=1}^{d} w_i x_i + b \right) = g(w^T x + b)
+    \end{equation}
+    \item \textbf{Thuật toán Lan truyền ngược (Backpropagation):} Là thuật toán cốt lõi tối ưu hóa mạng nơ-ron sâu. Đặc trưng toán học của giải thuật dựa trên **Quy tắc đạo hàm chuỗi (Chain Rule của giải tích)** để tính toán gradient sai số, điều phối luồng cập nhật trọng số $\Delta w_{ji}$ ngược từ tầng đầu ra về tầng đầu vào nhằm tối thiểu hóa hàm mất mát toàn cục $E$:
+    \begin{equation}
+        \Delta w_{ji} = -\alpha \frac{\partial E}{\partial w_{ji}} = -\alpha \frac{\partial E}{\partial a_j} \cdot \frac{\partial a_j}{\partial z_j} \cdot \frac{\partial z_j}{\partial w_{ji}}
+    \end{equation}
+    Trong đó, $\alpha$ là tốc độ học (\textit{learning rate}), $z_j$ là tổng kích hoạt tuyến tính tại nơ-ron $j$, và $a_j = g(z_j)$ là đầu ra phi tuyến của nơ-ron đó.
+\end{itemize}
+
+\end{document}

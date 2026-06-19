@@ -1,0 +1,16 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{PHẦN 4: KẾT QUẢ THỰC NGHIỆM \& TƯ DUY PHẢN BIỆN (Chiếm 20\% dung lượng)}
+
+\begin{itemize}
+    \item \textbf{Chứng minh thực nghiệm:} Hệ thống đã được kiểm thử thực tế trên tập dữ liệu nâng cao trích xuất thông qua thư viện \texttt{OSMnx} \cite{boeing2017osmnx} của 80 thành phố lớn trên thế giới (quy mô lên tới 277,000 nút) \cite{mutzari2025defending}. Kết quả định lượng cho thấy thuật toán S2D2 giúp giảm thiểu tối đa thiệt hại hạ tầng, \textbf{tăng hiệu quả bảo vệ lên trung bình 2.84 lần đối với dữ liệu mô phỏng} và \textbf{từ 34\% đến 41\% đối với dữ liệu cấu hình thực tế từ chuyên gia} khi so sánh với các giải thuật bầy đàn truyền thống \cite{mutzari2025defending}. Về mặt thời gian xử lý, hệ thống chỉ mất vài phút để giải toán, hoàn toàn khả thi để triển khai thực tế \cite{mutzari2025defending}.
+    \item \textbf{Tư duy phản biện (Hạn chế của hệ thống):} Mô hình hiện tại giả định kẻ tấn công di chuyển theo chiến lược tĩnh (\textit{Open-loop}) do không biết vị trí drone phòng thủ trước khi khai hỏa \cite{mutzari2025defending}. Tuy nhiên, các thử nghiệm làm nhiễu thông tin phần thưởng từ 0\% đến 100\% chứng minh chiến lược S2D2 vẫn giữ được xu hướng ổn định và có tính bền vững (\textit{Robustness}) cao \cite{mutzari2025defending}.
+    \item \textbf{Hướng phát triển tương lai:} Đồ án định hướng mở rộng mô hình trò chơi với các drone không đồng nhất (khác biệt vận tốc, có camera nhiệt quét đêm) \cite{mutzari2025defending}. Đồng thời, tích hợp hệ thống toán chiến lược này với các module thị giác máy tính nhận diện mục tiêu thời gian thực như YOLO và DeepSORT để tạo nên một lá chắn đô thị khép kín \cite{mutzari2025defending}.
+\end{itemize}
+
+\end{document}

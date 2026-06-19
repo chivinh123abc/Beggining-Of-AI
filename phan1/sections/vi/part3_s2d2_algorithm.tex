@@ -1,0 +1,24 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{PHẦN 3: PHÂN TÍCH GIẢI THUẬT CỐT LÕI S2D2 (Chiếm 40\% dung lượng)}
+
+Do không gian trạng thái của bài toán tuần tự tỷ lệ thuận theo hàm mũ với quy mô đô thị, việc tìm trạng thái cân bằng Strong Stackelberg Equilibrium (SSE) chính xác là một bài toán NP-hard \cite{korzhyk2011security}. Đồ án đề xuất giải thuật \textbf{S2D2 (Sequential Stackelberg Drone Defense)} nhằm tìm ra nghiệm xấp xỉ tối ưu thông qua 3 bước xử lý \cite{mutzari2025defending}:
+
+\subsection*{Sơ đồ luồng xử lý hệ thống (Pipeline Architecture)}
+\begin{center}
+    \small $\text{[Bản đồ Đô thị } G=(V,E)\text{]} \xrightarrow{\text{Bước 1: Coarsening}} \text{[Cụm Khu lân cận]} \xrightarrow{\text{Bước 2: Giải Subgame DFS}} \text{[Tối ưu đơn drone]} \xrightarrow{\text{Bước 3: Giải Meta-Game}} \text{[Ma trận phân bổ MILP]}$
+\end{center}
+
+\subsection*{Chi tiết 3 bước xử lý của thuật toán:}
+\begin{enumerate}
+    \item \textbf{Bước 1: Thu nhỏ đồ thị (Graph Coarsening - $\delta$-coarsening):} Bản đồ thành phố thực tế vô cùng khổng lồ với hàng trăm nghìn nút, khiến AI không thể tính toán trực tiếp \cite{mutzari2025defending}. S2D2 áp dụng phân cụm đồ thị thành các cụm nhân tạo gọi là ``Khu lân cận'' (\textit{Neighborhoods}) dựa trên tham số granularity $\delta$ \cite{mutzari2025defending}. Thuật toán bỏ qua các nút có phần thưởng nhỏ hơn $\delta$ để tập trung cô lập và bảo vệ các cụm mục tiêu có giá trị cao \cite{mutzari2025defending}.
+    \item \textbf{Bước 2: Giải bài toán đơn mục tiêu (Single-Attacker Single-Defender Subgame):} Trong phạm vi từng khu lân cận, hệ thống tính toán chiến lược đối phó tối ưu giữa 1 drone phòng thủ và 1 drone tấn công dưới một xác suất hiện diện $\lambda$ giả định của defender \cite{korzhyk2010complexity}. Hệ thống áp dụng kỹ thuật duyệt cây DFS sâu kết hợp loại bỏ các chiến lược bị thống trị (\textit{Dominated strategies}) để thu hẹp không gian tìm kiếm \cite{mutzari2025defending}.
+    \item \textbf{Bước 3: Giải trò chơi tổng thể (Solving the Meta-Game):} Sau khi có hàm lợi ích từ các khu lân cận, S2D2 quy đổi toàn bộ bài toán điều phối phi đội drone đa mục tiêu thành một bài toán Quy hoạch tuyến tính nguyên hỗn hợp (\textbf{MILP} - \textit{Mixed Integer Linear Program}) \cite{mutzari2025defending}. Bằng cách áp dụng xấp xỉ tuyến tính từng đoạn theo xác suất $\lambda$, mô hình MILP sẽ được giải để đưa ra ma trận phân bổ hỗn hợp ngẫu nhiên, xác định vị trí xuất phát tối ưu nhất cho từng drone đánh chặn \cite{mutzari2025defending}.
+\end{enumerate}
+
+\end{document}

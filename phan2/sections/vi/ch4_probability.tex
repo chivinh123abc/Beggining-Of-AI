@@ -1,0 +1,49 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{CHƯƠNG 4: SUY LUẬN XÁC SUẤT (Probabilistic Reasoning)}
+
+\subsection{4.1. Biểu diễn tri thức và suy luận trong điều kiện không chắc chắn (Knowledge representation and reasoning under uncertainty)}
+Khi môi trường hoạt động có tính chất quan sát được một phần và chứa các yếu tố ngẫu nhiên, các hệ thống logic thuần túy của Chương 3 sẽ bị sụp đổ do không thể biểu diễn mức độ tin cậy của thông tin. Toán học xác suất cung cấp công cụ định lượng hóa độ tin cậy bằng các biến ngẫu nhiên.
+
+\subsection{4.2. Quy tắc Bayes và Cơ sở lý thuyết xác suất (Bayes rule and basics of probability)}
+Đặc trưng toán học của suy luận xác suất dựa trên việc cập nhật niềm tin (\textit{belief}) về một Giả thuyết $H$ khi nhận được bằng chứng thực nghiệm mới $E$ từ hệ thống cảm biến.
+\begin{itemize}
+    \item \textbf{Biểu thức Quy tắc Bayes tổng quát:}
+    \begin{equation}
+        P(H | E) = \frac{P(E | H) \cdot P(H)}{P(E)} = \frac{P(E | H) \cdot P(H)}{\sum_{i} P(E | H_i) \cdot P(H_i)}
+    \end{equation}
+    \item \textbf{Thành phần tạo đặc trưng thuật toán:}
+    \begin{itemize}
+        \item $P(H | E)$ là Xác suất hậu nghiệm (\textit{Posterior probability}) - mục tiêu tính toán của AI.
+        \item $P(E | H)$ là Độ hợp lý (\textit{Likelihood}) - xác suất xuất hiện bằng chứng nếu giả thuyết đúng (thu thập dễ dàng qua thống kê thực nghiệm).
+        \item $P(H)$ là Xác suất tiền nghiệm (\textit{Prior probability}) - tỷ lệ khách quan ban đầu của giả thuyết khi chưa có cảm biến.
+    \end{itemize}
+\end{itemize}
+
+\subsection{4.3. Mạng Bayesian (Bayesian networks)}
+Một Mạng Bayesian là một cấu trúc cấu hình đồ thị có hướng không chu trình (DAG) $G=(V,E)$, trong đó mỗi nút $X_i \in V$ đại diện cho một biến ngẫu nhiên, và các cạnh $E$ mô tả quan hệ phụ thuộc nhân quả trực tiếp giữa các biến \cite{mutzari2025defending}.
+
+\textbf{Biểu thức toán học tạo đặc trưng (Định lý phân rã chuỗi):} Xác suất đồng thời đầy đủ của một cấu hình hệ thống gồm $n$ biến ngẫu nhiên được tính bằng tích các xác suất có điều kiện tại từng nút dựa trên tập cha trực tiếp của nó ($Parents(X_i)$):
+\begin{equation}
+    P(X_1, X_2, ..., X_n) = \prod_{i=1}^{n} P(X_i | Parents(X_i))
+\end{equation}
+\textbf{Bản chất tạo đặc trưng hình học:} Biểu thức tích chuỗi này bẻ gãy một bảng phân phối xác suất đồng thời khổng lồ có kích thước hàm mũ $2^n$ thành tổng các bảng xác suất có điều kiện cục bộ nhỏ gọn có kích thước $\sum 2^{|Parents(X_i)|}$, giúp tối ưu hóa bộ nhớ hệ thống.
+
+\subsection{4.4. Suy luận trong mạng Bayesian (Inference with Bayesian networks)}
+Mục tiêu là tính toán phân phối xác suất của một tập các biến truy vấn $X_{Query}$ khi biết giá trị của biến quan sát được $E = e$. Hệ thống áp dụng **Thuật toán loại bỏ biến (Variable Elimination)**.
+
+\textbf{Biểu thức toán học xử lý đặc trưng:} Thuật toán thực hiện gom các tổng $\sum$ đối với các biến ẩn không quan tâm $Y$ và đẩy chúng vào sâu bên trong biểu thức tích chuỗi:
+\begin{equation}
+    P(X_{Query} | E = e) = \alpha \sum_{y_1} \dots \sum_{y_k} \prod_{i=1}^{n} P(X_i | Parents(X_i))
+\end{equation}
+Phép biến đổi toán học này phân phối phép nhân đối với phép cộng để tính toán trước các nhân tử trung gian (\textit{factors}), giúp đưa chi phí tính toán từ mức lũy thừa hàm mũ xuống mức tuyến tính tương thích với cấu trúc cây của đồ thị.
+
+\subsection{4.5. Dự án và bài tập (Project and exercises)}
+Xây dựng mạng Bayes chẩn đoán lỗi hệ thống phần cứng, hoặc tính toán ma trận xác suất đe dọa của mạng lưới drone địch xâm nhập đô thị dựa trên luồng dữ liệu radar không hoàn hảo.
+
+\end{document}

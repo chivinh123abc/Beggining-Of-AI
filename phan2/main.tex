@@ -1,0 +1,40 @@
+﻿\documentclass[11pt,a4paper]{article}
+
+% =========================================================================
+% CẤU HÌNH CHUNG (Shared Config)
+% =========================================================================
+\input{../config/packages}
+\input{../config/formatting}
+
+% Subfiles: cho phép compile độc lập từng section
+\usepackage{subfiles}
+
+\begin{document}
+
+% =========================================================================
+% PHẦN TIẾNG VIỆT — TÀI LIỆU ÔN THI 5 CHƯƠNG AI
+% =========================================================================
+\subfile{sections/vi/ch1_introduction}
+\subfile{sections/vi/ch2_search}
+\subfile{sections/vi/ch3_knowledge}
+\subfile{sections/vi/ch4_probability}
+\subfile{sections/vi/ch5_machine_learning}
+
+% =========================================================================
+% ENGLISH SECTION — COMPREHENSIVE 5-CHAPTER AI EXAM SOURCE
+% =========================================================================
+\newpage
+\subfile{sections/en/ch1_introduction}
+\subfile{sections/en/ch2_search}
+\subfile{sections/en/ch3_knowledge}
+\subfile{sections/en/ch4_probability}
+\subfile{sections/en/ch5_machine_learning}
+
+% =========================================================================
+% TÀI LIỆU THAM KHẢO (References)
+% =========================================================================
+\newpage
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

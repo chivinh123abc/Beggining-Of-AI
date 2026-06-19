@@ -1,0 +1,49 @@
+﻿% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{CHAPTER 4: PROBABILISTIC REASONING}
+
+\subsection{4.1. Knowledge representation and reasoning under uncertainty}
+When operating in partially observable and stochastically volatile environments, static logic databases fail due to their inability to quantify partial degrees of belief. Probability theory resolves this by modeling operational states through random variables.
+
+\subsection{4.2. Bayes rule and basics of probability}
+The core feature of probabilistic reasoning centers on updating the calculated belief in a Hypothesis $H$ when receiving a new empirical telemetry stream $E$ from hardware sensors.
+\begin{itemize}
+    \item \textbf{Generalized Bayes' Rule Formulation:}
+    \begin{equation}
+        P(H | E) = \frac{P(E | H) \cdot P(H)}{P(E)} = \frac{P(E | H) \cdot P(H)}{\sum_{i} P(E | H_i) \cdot P(H_i)}
+    \end{equation}
+    \item \textbf{Algorithmic Characterization Components:}
+    \begin{itemize}
+        \item $P(H | E)$ represents the Conditional Posterior Probability, the ultimate objective of the AI tracking backend.
+        \item $P(E | H)$ tracks the Likelihood, the probability that the evidence occurs given the hypothesis is true (extracted via statistical history).
+        \item $P(H)$ defines the Objective Prior Probability, the base baseline occurrence rate of the threat before activating sensor streams.
+    \end{itemize}
+\end{itemize}
+
+\subsection{4.3. Bayesian networks}
+A Bayesian Network is a structured Directed Acyclic Graph (DAG) $G=(V,E)$ where vertices $V$ map distinct random variables and directed edges $E$ explicitly quantify direct causal dependencies across fields \cite{mutzari2025defending}.
+
+\textbf{Mathematical Joint Distribution Factoring (Chain Rule):} The complete joint probability distribution over the global space of $n$ random variables is factored into compact products of localized conditional states governed strictly by immediate parent nodes ($Parents(X_i)$):
+\begin{equation}
+    P(X_1, X_2, ..., X_n) = \prod_{i=1}^{n} P(X_i | Parents(X_i))
+\end{equation}
+\textbf{Algorithmic Feature Compression:} This chain product systematically compresses a massive joint distribution table scaling exponentially at $2^n$ down to compact localized tables scaling linearly at $\sum 2^{|Parents(X_i)|}$.
+
+\subsection{4.4. Inference with Bayesian networks}
+The target objective is to compute the exact probability profile of a set of query variables $X_{Query}$ given observed historical evidence states $E = e$. The system implements the **Variable Elimination (VE)** engine.
+
+\textbf{Mathematical Core Filtering Equation:} VE collects summation operators over hidden unobserved variables $Y$ and distributes them deep inside the product chain:
+\begin{equation}
+    P(X_{Query} | E = e) = \alpha \sum_{y_1} \dots \sum_{y_k} \prod_{i=1}^{n} P(X_i | Parents(X_i))
+\end{equation}
+This mathematical transformation distributes multiplications over additions to pre-compute intermediate factors, converting exponential computational costs into a linear space bounded by the graph's tree-width.
+
+\subsection{4.5. Project and exercises}
+Engineering Bayesian diagnostic systems for hardware fault localization, or resolving live threat matrix assessments for drone swarm tracking using noisy radar observations.
+
+\end{document}
