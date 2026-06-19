@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{PART 2 (QUESTION 2): EXPLANATION UNDER CHAPTER 2 -- SEARCH \& PROBLEM SOLVING}
+
+The movement and interception tactics of the defensive interceptors across the urban topology are resolved in the paper \cite{mutzari2025defending} by applying the principles of **Problem-Solving by State-Space Search**.
+
+\subsection{2.1. Search Problem Formulation}
+The physical patrol and interception task of the defender agent is formulated as a formal search problem defined by five parameters:
+\begin{enumerate}
+    \item **Initial State ($s_0$):** Starting coordinates of the defender ($v_d$) and attacker ($v_a$), initial battery capacities $B$, payload capacities $P$, and empty strategy sets.
+    \item **Actions ($Actions(s)$):** Physical movements to adjacent vertices in the graph $G=(V,E)$, or hovering in place (\textit{loitering}) to patrol the current sector.
+    \item **Transition Model ($Result(s, a)$):** Returns the outcome state after executing action $a$ (updates drone positions and decrements the battery capacity: $B \leftarrow B - 1$).
+    \item **Goal Test ($GoalTest(s)$):** Determines if a terminal state is reached. This is satisfied when the defender successfully intercepts the attacker drone at a vertex (\textit{catch}), when the attacker reaches a target and destroys it without defensive coverage, or when the battery runs out ($B = 0$).
+    \item **Path Cost:** Measured by energy expenditure (battery units consumed per step) or geometric distance traversed along the graph's edges.
+\end{enumerate}
+
+\subsection{2.2. Depth-First Search (DFS) in the Subgame Solver}
+To extract non-dominated pure defense strategies ($S_d$) against the set of possible attack strategies $S_a$, S2D2 executes a **Depth-First Search (DFS)** traversal in the `ScanDefenseStrategies` routine (Algorithm 5) \cite{mutzari2025defending}:
+*   **Execution Logic:** The solver recursively traverses the tree of possible drone movements. At each node, it computes interception viability (`catch`), prunes sub-optimal paths, and continues descending.
+*   **Rationale for Using DFS:** Because the battery capacity $B$ restricts the maximal depth $m$ of the search tree ($m \le B$), there is no risk of infinite loops. DFS is preferred due to its linear space complexity $\mathcal{O}(bm)$, avoiding the exponential memory requirements $\mathcal{O}(b^d)$ of BFS, which is critical for deployment on resource-constrained embedded drone hardware.
+
+\subsection{2.3. State Space Abstraction via Graph Coarsening}
+Searching on a real-world urban graph with hundreds of thousands of nodes is an NP-hard problem due to the combinatorial explosion ($b^d$). To resolve this:
+*   The paper utilizes **Graph Coarsening ($\delta$-coarsening)**. This maps directly to **State Space Abstraction** in heuristic search theory.
+*   By clustering adjacent nodes into artificial "Neighborhoods" and ignoring low-value targets below a granularity threshold $\delta$, S2D2 simplifies a massive network into a compact set of high-value sub-graphs. This reduces the branching factor $b$ and depth $d$, allowing the DFS solver to converge in just a few minutes.
+
+\end{document}

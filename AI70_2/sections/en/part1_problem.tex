@@ -1,0 +1,51 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{PART 1 (QUESTION 1): EXPLANATION UNDER CHAPTER 1 -- AI OVERVIEW \& INTELLIGENT AGENTS}
+
+The research paradigm presented in the paper \cite{mutzari2025defending} addresses the urban multi-drone defense problem by modeling and structuring the system based on the core concept of Chapter 1: **Intelligent Agents acting rationally (Rational Agents)**.
+
+\subsection{1.1. Agent Modeling}
+The urban defense framework is formulated as a competitive multi-agent environment consisting of two main agent types:
+\begin{enumerate}
+    \item **Defender Agent:** The autonomous coordination backend managing the squadron of interceptor drones.
+    \item **Attacker Agent:** The adversary's squadron of offensive drones attempting to infiltrate the city.
+\end{enumerate}
+
+To formally characterize the task environment of these agents, we define the **PAGE** (Performance, Environment, Actuators, Sensors) model as follows:
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{|p{2.5cm}|p{4.5cm}|p{4.5cm}|}
+\hline
+\textbf{Component} & \textbf{Defender Agent (Leader)} & \textbf{Attacker Agent (Follower)} \\ \hline
+\textbf{Performance Measure (P)} & Maximize interception rate, minimize structural urban damage, optimize battery consumption. & Maximize physical damage to critical ground infrastructure targets. \\ \hline
+\textbf{Environment (E)} & Urban airspace graph $G=(V,E)$ with obstacles, wind dynamics, and signal interference. & Urban airspace graph, with the presence of active interceptor drones. \\ \hline
+\textbf{Actuators (A)} & Interceptor drone rotors, payload release (nets/lasers/jammers) to neutralize targets. & Attack drone rotors, explosive payload triggering mechanisms. \\ \hline
+\textbf{Sensors (S)} & City-wide radar networks, GPS trackers, onboard optical/thermal cameras, communication links. & GPS navigation units, target-acquisition optical cameras. \\ \hline
+\end{tabular}
+\caption{PAGE specification for defender and attacker agents.}
+\end{table}
+
+\subsection{1.2. Task Environment Properties}
+The task environment of the urban drone defense scenario exhibits the most complex properties discussed in Chapter 1:
+\begin{itemize}
+    \item **Partially Observable:** The radar network has a finite scanning range; the adversary's initial positions and launch trajectories are only observed upon entering detection bubbles.
+    \item **Competitive Multi-Agent:** The defender and attacker have opposing utility functions within the game.
+    \item **Dynamic:** The state of the environment (drones' positions) changes continuously in real-time while the agent is executing reasoning processes.
+    \item **Sequential:** An action taken at step $t$ affects the agent's battery and limits the coverage of target nodes at future time steps.
+    \item **Stochastic:** Physical interception and sensing are subject to wind turbulence, sensor noise, and capture failure probabilities.
+\end{itemize}
+
+\subsection{1.3. Rationality \& Stackelberg Game Framework}
+The system enforces **Rationality** (acting to maximize expected performance) through a game-theoretic model: the **Sequential Stackelberg Security Game (SSSG)** \cite{mutzari2025defending}.
+*   **Rational Defender (Leader):** The defender commits to a randomized **mixed strategy** (a probability distribution over deployment sectors) to prevent the attacker from exploiting predictable patrol schedules.
+*   **Rational Attacker (Follower):** The attacker observes the defender's coverage probabilities and plays its mathematically calculated **best response** to maximize damage.
+The AI system solves for a **Strong Stackelberg Equilibrium (SSE)** where both agents act rationally under the strategic constraints of the opponent.
+
+\end{document}

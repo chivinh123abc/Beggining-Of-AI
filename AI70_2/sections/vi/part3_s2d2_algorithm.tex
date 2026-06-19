@@ -1,0 +1,44 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{PHẦN 3 (CÂU 3): GIẢI THÍCH DƯỚI GÓC NHÌN CHƯƠNG 3 -- BIỂU DIỄN TRI THỨC VÀ SUY LUẬN LOGIC (Knowledge Representation and Reasoning)}
+
+Để đưa ra các quyết định điều phối chiến lược tối ưu, hệ thống AI trong bài báo \cite{mutzari2025defending} được cấu trúc hóa theo mô hình kiến trúc của Chương 3: chia tách giữa **Cơ sở tri thức (Knowledge Base - KB)** và **Công cụ suy luận (Inference Engine)**.
+
+\subsection{3.1. Cơ sở tri thức (Knowledge Base - KB)}
+Tri thức về bản đồ đô thị, thông tin drone và luật chơi được mã hóa trang trọng vào Cơ sở tri thức ($KB$) thông qua các tập hợp biến số, ma trận và ràng buộc logic:
+\begin{itemize}
+    \item \textbf{Biểu diễn cấu trúc thế giới:} Đồ thị đô thị $G=(V,E)$, vị trí các mục tiêu quan trọng mặt đất và trọng số thiệt hại của chúng ($P^d$) được lưu trữ làm sự thật hiển nhiên trong $KB$.
+    \item \textbf{Mã hóa các quy luật vật lý dưới dạng mệnh đề:}
+    \begin{itemize}
+        \item \textit{Ràng buộc pin:} ``Nếu drone đi qua $k$ cạnh thì năng lượng tiêu thụ bằng $k$ đơn vị và phải nhỏ hơn hoặc bằng $B$'' ($\sum e \le B$).
+        \item \textit{Ràng buộc đánh chặn:} ``Mục tiêu $v$ được bảo vệ tại thời điểm $t$ nếu và chỉ nếu tồn tại drone phòng thủ $d$ hiện diện tại $v$ trước hoặc cùng lúc với drone tấn công $a$'' ($t_d \le t_a$).
+        \item \textit{Ràng buộc tải trọng:} ``Drone tấn công chỉ phá hủy tối đa $P$ mục tiêu''.
+    \end{itemize}
+\end{itemize}
+Các quy luật này tương tự như việc định nghĩa các câu điều kiện logic bậc nhất (FOL) biểu diễn mối tương quan giữa các đối tượng (drone, mục tiêu) và thuộc tính của chúng.
+
+\subsection{3.2. Công cụ suy luận (Inference Engine)}
+Từ cơ sở tri thức $KB$, hệ thống cần suy luận ra chiến lược phân bổ drone tối ưu. Công cụ suy luận trong S2D2 hoạt động qua hai giai đoạn suy diễn chính:
+
+\subsubsection{3.2.1. Suy diễn loại trừ chiến lược bị thống trị (Dominated Strategies Pruning)}
+Trong thuật toán giải subgame (Algorithm 5), hệ thống sử dụng các quy luật lập luận logic để lọc bỏ các chiến lược yếu hơn (\textit{dominated strategies}). Một chiến lược phòng thủ $\sigma_1$ bị thống trị bởi $\sigma_2$ nếu với mọi chiến lược tấn công của địch, $\sigma_2$ đều cho kết quả đánh chặn tốt hơn hoặc bằng $\sigma_1$. 
+* \textbf{Bản chất logic:} Áp dụng luật suy luận bác bỏ: 
+\begin{equation}
+    \forall s_a \in S_a, \quad \text{Utility}(d_2, s_a) \ge \text{Utility}(d_1, s_a) \implies \text{Loại bỏ } d_1
+\end{equation}
+Phép loại bỏ này giúp rút gọn đáng kể kích thước không gian tri thức suy luận.
+
+\subsubsection{3.2.2. Công cụ suy luận ràng buộc MILP (Mixed Integer Linear Program)}
+Tại tầng Meta-Game (Algorithm 6), bài toán phối hợp đa mục tiêu được chuyển đổi thành mô hình **Quy hoạch tuyến tính số nguyên hỗn hợp (MILP)** \cite{mutzari2025defending}. MILP đóng vai trò là một **Công cụ suy luận dựa trên ràng buộc (Constraint-satisfaction Inference Engine)**:
+\begin{itemize}
+    \item \textbf{Đầu vào suy luận:} Hàm lợi ích xấp xỉ tuyến tính từng đoạn dựa trên xác suất $\lambda$ trích xuất từ các subgame.
+    \item \textbf{Logic toán học điều phối:} Bộ giải MILP tự động thực hiện quá trình suy diễn đồng thời trên hàng trăm ràng buộc tài nguyên phòng thủ ($\sum x_d = D$), ràng buộc phản ứng tốt nhất của kẻ tấn công (các bất đẳng thức buộc kẻ tấn công chọn khu vực có lợi nhất cho nó) để suy ra kết quả cuối cùng: **Ma trận phân bổ xác suất hỗn hợp tối ưu nhất**.
+\end{itemize}
+Quá trình suy luận này đảm bảo tính đúng đắn toán học tuyệt đối và chứng minh được tính tối ưu toàn cục của giải pháp phân bổ tài nguyên.
+
+\end{document}

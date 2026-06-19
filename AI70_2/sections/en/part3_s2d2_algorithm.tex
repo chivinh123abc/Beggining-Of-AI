@@ -1,0 +1,44 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\section{PART 3 (QUESTION 3): EXPLANATION UNDER CHAPTER 3 -- KNOWLEDGE REPRESENTATION \& REASONING}
+
+To formulate strategic coordination plans, the AI architecture of S2D2 \cite{mutzari2025defending} separates the system into a **Knowledge Base (KB)** and an **Inference Engine**, mirroring the core architecture of Chapter 3.
+
+\subsection{3.1. Knowledge Representation (KB)}
+Real-world spatial data, hardware limits, and game rules are encoded into the system's Knowledge Base ($KB$) using structured variables, matrices, and logical constraints:
+\begin{itemize}
+    \item \textbf{Representing the World Structure:} The urban topology graph $G=(V,E)$, coordinates of critical landmarks, and their associated penalty weights ($P^d$) are represented as facts in the $KB$.
+    \item \textbf{Encoding Physical Rules as Logical Implications:}
+    \begin{itemize}
+        \item \textit{Battery Constraint:} "If a drone traverses a path of length $k$, then the consumed energy is $k$, which must be less than or equal to $B$" ($\sum e \le B$).
+        \item \textit{Interception Rule:} "Target $v$ is safe at step $t$ if and only if there exists a defense drone $d$ present at $v$ at or before the arrival of attacker $a$" ($t_d \le t_a$).
+        \item \textit{Payload Rule:} "An attack drone can destroy at most $P$ targets."
+    \end{itemize}
+\end{itemize}
+These rules are equivalent to First-Order Logic (FOL) sentences mapping relations between entities (drones, targets) and their attributes.
+
+\subsection{3.2. Inference Engine}
+The system utilizes an Inference Engine to deduce the optimal mixed allocation strategy from the facts in the $KB$. The inference routine consists of two main stages:
+
+\subsubsection{3.2.1. Logical Deduction and Strategy Pruning}
+In the subgame solver (Algorithm 5), the inference engine reasons about strategy sets to prune dominated defense profiles. A strategy is dominated if it yields lower or equal interception utility compared to another strategy for all opponent actions.
+* \textbf{Logical Formulation:} The engine applies a pruning rule:
+\begin{equation}
+    \forall s_a \in S_a, \quad \text{Utility}(d_2, s_a) \ge \text{Utility}(d_1, s_a) \implies \text{Prune } d_1
+\end{equation}
+This deduction reduces the size of the active knowledge space.
+
+\subsubsection{3.2.2. Constraint-Satisfaction Inference via MILP Solver}
+At the meta-game level (Algorithm 6), S2D2 compiles the multi-drone allocation problem into a **Mixed Integer Linear Program (MILP)** \cite{mutzari2025defending}. The MILP solver acts as a **Constraint-satisfaction Inference Engine**:
+\begin{itemize}
+    \item \textbf{Inference Inputs:} Piecewise linear utility functions approximating defense coverage probabilities ($\lambda$) derived from subgame solutions.
+    \item \textbf{Logical Constraints:} The engine resolves resource constraints ($\sum x_d = D$) and adversary best-response inequalities (forcing the attacker variables to select the target maximizing its reward) to deduce the optimal outcome: **The mixed allocation strategy matrix**.
+\end{itemize}
+This constraint-satisfaction inference guarantees mathematical completeness and proves the global optimality of the strategic deployment plan.
+
+\end{document}

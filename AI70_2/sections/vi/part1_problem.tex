@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{PHẦN 1 (CÂU 1): GIẢI THÍCH DƯỚI GÓC NHÌN CHƯƠNG 1 -- TỔNG QUAN AI \& ĐẠI LÝ THÔNG MINH (Intelligent Agents)}
+
+Đề tài nghiên cứu của bài báo \cite{mutzari2025defending} giải quyết bài toán chống tấn công đa drone trong đô thị bằng cách thiết lập và mô hình hóa hệ thống dựa trên lý thuyết cốt lõi của Chương 1: **Đại lý thông minh hành động hợp lý (Rational Agents)**. 
+
+\subsection{1.1. Mô hình hóa Đại lý (Agent Modeling)}
+Hệ thống phòng thủ đô thị được thiết lập như một môi trường đa tác nhân cạnh tranh trực tiếp (\textit{Competitive Multi-agent environment}), bao gồm hai loại đại lý chính:
+\begin{enumerate}
+    \item \textbf{Đại lý phòng thủ (Defender Agent):} Hệ thống điều phối phi đội drone đánh chặn.
+    \item \textbf{Đại lý tấn công (Attacker Agent):} Phi đội drone của kẻ địch xâm nhập.
+\end{enumerate}
+
+Để đặc tả môi trường hoạt động của các đại lý này, ta áp dụng mô hình \textbf{PAGE} (Performance, Environment, Actuators, Sensors) như sau:
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{|p{2.5cm}|p{4.5cm}|p{4.5cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Đại lý phòng thủ (Defender)} & \textbf{Đại lý tấn công (Attacker)} \\ \hline
+\textbf{Hàm hiệu suất (P)} & Tối đa hóa tỷ lệ đánh chặn, tối thiểu hóa thiệt hại tài sản đô thị, tối ưu năng lượng pin. & Tối đa hóa thiệt hại gây ra cho các hạ tầng trọng yếu trên mặt đất. \\ \hline
+\textbf{Môi trường (E)} & Không gian đô thị $G=(V,E)$ với vật cản, nhiễu sóng, gió và địa hình động. & Không gian đô thị, có sự xuất hiện của các drone phòng thủ đánh chặn. \\ \hline
+\textbf{Bộ chấp hành (A)} & Động cơ cánh quạt drone, thiết bị phóng lưới/laser vô hiệu hóa drone địch. & Động cơ drone, bộ kích nổ/thả tải trọng phá hủy mục tiêu. \\ \hline
+\textbf{Cảm biến (S)} & Radar quét đô thị, định vị GPS, camera quang học/nhiệt, bộ thu phát tín hiệu. & Định vị GPS định tuyến, camera nhận dạng mục tiêu quang học. \\ \hline
+\end{tabular}
+\caption{Đặc tả PAGE cho các đại lý trong mô hình phòng thủ.}
+\end{table}
+
+\subsection{1.2. Đặc tính của Môi trường tác vụ (Task Environment Properties)}
+Môi trường phòng thủ drone đô thị mang các đặc tính phức tạp nhất của lý thuyết đại lý:
+\begin{itemize}
+    \item \textbf{Quan sát được một phần (Partially Observable):} Radar chỉ quét được trong phạm vi nhất định; vị trí xuất phát và quỹ đạo bay của attacker chỉ được phát hiện khi bắt đầu xâm nhập.
+    \item \textbf{Đa tác nhân cạnh tranh (Competitive Multi-agent):} Đại lý phòng thủ và tấn công có hàm lợi ích đối nghịch nhau trong trò chơi tổng thể.
+    \item \textbf{Động (Dynamic):} Trạng thái môi trường (vị trí các drone) liên tục thay đổi theo thời gian thực trong khi tác nhân đang suy luận.
+    \item \textbf{Tuần tự (Sequential):} Quyết định di chuyển của drone ở thời điểm $t$ ảnh hưởng trực tiếp tới dung lượng pin và khả năng bao phủ các nút trong tương lai.
+    \item \textbf{Ngẫu nhiên (Stochastic):} Quá trình đánh chặn thực tế chịu ảnh hưởng bởi nhiễu cảm biến, điều kiện thời tiết và xác suất bắt trượt.
+\end{itemize}
+
+\subsection{1.3. Nguyên lý hành động hợp lý (Rationality) \& Trò chơi Stackelberg}
+Bài báo áp dụng nguyên lý \textbf{Hành động hợp lý (Acting Rationally)} để giải quyết xung đột lợi ích thông qua mô hình \textbf{Trò chơi an ninh Stackelberg tuần tự (Sequential Stackelberg Security Game - SSSG)} \cite{mutzari2025defending}:
+\begin{itemize}
+    \item \textbf{Defender (Leader) hành động hợp lý:} Tác nhân phòng thủ đi trước bằng cách cam kết một chiến lược hỗn hợp ngẫu nhiên (\textit{Mixed strategy} - phân bổ drone theo phân phối xác suất). Việc ngẫu nhiên hóa này ngăn chặn kẻ thù nắm bắt quy luật tuần tra cố định.
+    \item \textbf{Attacker (Follower) hành động hợp lý:} Kẻ tấn công quan sát chiến lược của defender, tính toán và thực hiện hành động phản ứng tối ưu nhất (\textit{Best response}) để tối đa hóa hàm lợi ích của nó. 
+\end{itemize}
+Hệ thống AI hướng tới trạng thái \textbf{Cân bằng Strong Stackelberg Equilibrium (SSE)}, nơi cả hai đại lý đều tối đa hóa lợi ích kỳ vọng của mình dưới các ràng buộc nghiêm ngặt của đối phương.
+
+\end{document}

@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\selectlanguage{vietnamese}
+
+\section{PHẦN 2 (CÂU 2): GIẢI THÍCH DƯỚI GÓC NHÌN CHƯƠNG 2 -- TÌM KIẾM VÀ GIẢI QUYẾT BÀI TOÁN (Search and Problem Solving)}
+
+Hành vi điều phối và di chuyển của các drone đánh chặn trên không gian thành phố được bài báo \cite{mutzari2025defending} giải quyết bằng cách áp dụng trực tiếp lý thuyết **Giải quyết bài toán bằng tìm kiếm trạng thái (Search)**.
+
+\subsection{2.1. Phát biểu bài toán tìm kiếm (Search Problem Formulation)}
+Toán học hóa hành động tuần tra và đánh chặn của đại lý phòng thủ được phát biểu dưới dạng một bài toán tìm kiếm chuẩn mực gồm 5 thành phần:
+\begin{enumerate}
+    \item **Trạng thái khởi đầu (Initial State - $s_0$):** Vị trí xuất phát của drone phòng thủ ($v_d$) và drone tấn công ($v_a$), dung lượng pin ban đầu $B$, tải trọng $P$ và tập các chiến lược rỗng.
+    \item **Hành động (Actions - $Actions(s)$):** Khả năng di chuyển của drone tới các nút lân cận trong đồ thị không gian $G=(V,E)$ hoặc đứng yên tuần tra tại chỗ (\textit{loitering}).
+    \item **Mô hình chuyển trạng thái (Transition Model - $Result(s, a)$):** Trả về trạng thái mới của hệ thống sau khi thực hiện hành động $a$ (vị trí tọa độ mới của drone, dung lượng pin giảm đi 1 đơn vị: $B \leftarrow B - 1$).
+    \item **Kiểm tra mục tiêu (Goal Test - $GoalTest(s)$):** Xác định trạng thái kết thúc. Trạng thái đích đạt được khi drone phòng thủ đánh chặn thành công drone địch tại một nút trung gian (\textit{catch}), hoặc khi drone địch tiếp cận thành công mục tiêu phá hủy mà ta không thể can thiệp, hoặc khi dung lượng pin cạn kiệt ($B = 0$).
+    \item **Chi phí đường đi (Path Cost):** Đo đạc bằng năng lượng tiêu thụ (số bước di chuyển tiêu tốn pin) hoặc khoảng cách hình học di chuyển trên các cạnh của đồ thị.
+\end{enumerate}
+
+\subsection{2.2. Áp dụng Thuật toán tìm kiếm theo chiều sâu (DFS) giải Subgame}
+Để tìm ra các chiến lược phòng thủ không bị thống trị (\textit{non-dominated strategies}) trong từng khu lân cận đối đầu với tập chiến lược tấn công $S_a$, giải thuật S2D2 áp dụng **Tìm kiếm theo chiều sâu (Depth-First Search - DFS)** (được mô tả trong thuật toán `ScanDefenseStrategies` - Algorithm 5) \cite{mutzari2025defending}:
+*   **Cơ chế hoạt động:** DFS thực hiện duyệt sâu đệ quy qua cây quyết định di chuyển của drone. Tại mỗi bước đi, thuật toán cập nhật không gian trạng thái, tính toán khả năng đánh chặn (`catch`) và tiếp tục rẽ nhánh đi xuống.
+*   **Lý do lựa chọn DFS:** Do dung lượng pin $B$ của drone giới hạn độ sâu tối đa của cây tìm kiếm ($m \le B$), không gian tìm kiếm là hữu hạn và không có vòng lặp vô hạn. DFS là lựa chọn tối ưu do có độ phức tạp không gian lưu trữ tuyến tính chỉ ở mức $\mathcal{O}(bm)$ thay vì mức bùng nổ lũy thừa $\mathcal{O}(b^d)$ của BFS, giúp tiết kiệm bộ nhớ cho vi điều khiển của drone.
+
+\subsection{2.3. Trừu tượng hóa trạng thái qua Thu nhỏ đồ thị (Graph Abstraction)}
+Bài toán tìm kiếm trên bản đồ đô thị thực tế có không gian trạng thái khổng lồ (bùng nổ tổ hợp $b^d$, thuộc nhóm bài toán NP-hard). Để giải quyết:
+*   Bài báo áp dụng kỹ thuật **Thu nhỏ đồ thị ($\delta$-coarsening)**. Đây chính là phương pháp **Trừu tượng hóa trạng thái (State Abstraction)** trong tìm kiếm Heuristic.
+*   Bằng cách gom cụm các nút gần nhau thành các "Khu lân cận" (\textit{Neighborhoods}) nhân tạo và bỏ qua các mục tiêu giá trị nhỏ hơn $\delta$, S2D2 đã đơn giản hóa một đồ thị hàng trăm nghìn nút về một số lượng nhỏ các khu vực lớn độc lập. Kỹ thuật này giúp giảm hệ số nhánh $b$ và độ sâu tìm kiếm $d$, giúp thuật toán tìm kiếm DFS hội tụ nhanh chóng chỉ trong vài phút.
+
+\end{document}
